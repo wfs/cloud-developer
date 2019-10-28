@@ -49,8 +49,32 @@ router.patch('/:id',
     requireAuth, 
     async (req: Request, res: Response) => {
         //@TODO try it yourself
-        res.send(500).send("not implemented")
-});
+
+        // destruct our path params
+        let { id } = req.params;
+        console.log('patch item id: %s', id);
+
+        // check to make sure the id is set
+        if (!id) { 
+        // respond with an error if not
+        return res.status(400).send(`id of item to patch is required`);
+        }
+  
+        // try to find the item by primary key using id
+        const item = await FeedItem.findByPk(id);
+        console.log('item to patch found by pk: %s', item);
+
+        // respond not found, if we do not have this id
+        if(item && item.id === 0) {
+        return res.status(404).send(`item to patch was not found`);
+        }
+        
+        //res.send(500).send("not implemented")
+        // I'm following this example from docs - https://www.npmjs.com/package/sequelize-typescript#model-path-resolving
+        res.send(item.update({caption: 'Braapp!'}, {where: {id: id}})
+        )
+    }
+);
 
 
 // Get a signed url to put a new item in the bucket
