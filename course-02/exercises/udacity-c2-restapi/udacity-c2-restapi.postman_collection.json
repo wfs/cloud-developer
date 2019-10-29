@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "90c44738-86d0-440c-ac60-dcb7b70fb9e8",
+		"_postman_id": "32cd5b26-b9cb-430f-83f8-866eb6cdff46",
 		"name": "udacity-c2-restapi",
 		"description": "Requests that should work!",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -37,10 +37,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "{{host}}/api/v0/feed",
 							"host": [
@@ -84,12 +80,8 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
-							"raw": "{{host}}/api/v0/feed/:id",
+							"raw": "{{host}}/api/v0/feed/:id?",
 							"host": [
 								"{{host}}"
 							],
@@ -121,12 +113,8 @@
 							"originalRequest": {
 								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
 								"url": {
-									"raw": "{{host}}/api/v0/feed/:id",
+									"raw": "{{host}}/api/v0/feed/:id?",
 									"host": [
 										"{{host}}"
 									],
@@ -409,7 +397,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Unauthorized",
@@ -456,7 +445,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Authorized",
@@ -487,7 +477,7 @@
 						}
 					],
 					"request": {
-						"method": "POST",
+						"method": "PATCH",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -501,7 +491,7 @@
 							"raw": "{}"
 						},
 						"url": {
-							"raw": "{{host}}/api/v0/feed",
+							"raw": "{{host}}/api/v0/feed?id=1",
 							"host": [
 								"{{host}}"
 							],
@@ -509,6 +499,12 @@
 								"api",
 								"v0",
 								"feed"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1"
+								}
 							]
 						},
 						"description": "Post a new item to the feed"
@@ -516,7 +512,7 @@
 					"response": []
 				},
 				{
-					"name": "/api/v0/feed authorized Copy",
+					"name": "/api/v0/feed//signed-url/:fileName",
 					"event": [
 						{
 							"listen": "test",
@@ -540,8 +536,11 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -552,20 +551,22 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"caption\": \"Hello\",\n    \"url\": \"test.jpg\"\n}"
+							"raw": "{\n    \"caption\": \"Goodbye\",\n    \"url\": \"test.jpg\"\n}"
 						},
 						"url": {
-							"raw": "{{host}}/api/v0/feed",
+							"raw": "{{host}}/api/v0/feed/signed-url/rally_mud.png",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"api",
 								"v0",
-								"feed"
+								"feed",
+								"signed-url",
+								"rally_mud.png"
 							]
 						},
-						"description": "Post a new item to the feed"
+						"description": "Request a signed url for a file."
 					},
 					"response": []
 				}
@@ -601,7 +602,8 @@
 						]
 					}
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -633,5 +635,6 @@
 			"value": "http://localhost:8080",
 			"type": "string"
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
