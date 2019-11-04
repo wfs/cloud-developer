@@ -1,13 +1,13 @@
 export const config = {
   "dev": {
-    "username": "postgres",
-    "password": "postgres",
-    "database": "database_name",
-    "host": "database-instance-id.cvblabgxnph4.ap-southeast-2.rds.amazonaws.com",
+    "username": process.env.POSTGRES_USERNAME,
+    "password": process.env.POSTGRES_PASSWORD,
+    "database": process.env.POSTGRES_DATABASE_NAME,
+    "host": process.env.POSTGRES_HOST,
     "dialect": "postgres",
-    "aws_region": "ap-southeast-2",
-    "aws_profile": "udagram-wilkie-dev",
-    "aws_media_bucket": "udagram-wilkie-dev"
+    "aws_region": process.env.AWS_REGION,
+    "aws_profile": process.env.AWS_PROFILE,
+    "aws_media_bucket": process.env.AWS_MEDIA_BUCKET
   },
   "prod": {
     "username": "",
