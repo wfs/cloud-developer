@@ -4,8 +4,15 @@ import { config } from './config/config';
 const c = config.dev;
 
 //Configure AWS
-var credentials = new AWS.SharedIniFileCredentials({profile: c.aws_profile});
-AWS.config.credentials = credentials;
+/* When we're working locally, we need to specify which AWS profile to use.
+* When we're deploying to an AWS ElasticBeanstalk instance, 
+* the profile will be implicitly set by the instance.
+* We can use the logic control to implicitly not specify these AWS credentials in this deployed state.
+*/
+if(c.aws_profile !== "DEPLOYED") {
+  var credentials = new AWS.SharedIniFileCredentials({profile: c.aws_profile});
+  AWS.config.credentials = credentials;
+}
 
 export const s3 = new AWS.S3({
   signatureVersion: 'v4',
