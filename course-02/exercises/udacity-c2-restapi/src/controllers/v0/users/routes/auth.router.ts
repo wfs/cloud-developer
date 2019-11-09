@@ -7,6 +7,7 @@ import * as jwt from 'jsonwebtoken';
 import { NextFunction } from 'connect';
 
 import * as EmailValidator from 'email-validator';
+import { config } from '../../../../config/config';
 
 const router: Router = Router();
 
@@ -25,7 +26,7 @@ async function comparePasswords(plainTextPassword: string, hash: string): Promis
 
 function generateJWT(user: User): string {
     //@TODO Use jwt to create a new JWT Payload containing
-    return "";
+    return jwt.sign(user,config.jwt.secret);
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
@@ -63,7 +64,6 @@ router.post('/login', async (req: Request, res: Response) => {
     if (!email || !EmailValidator.validate(email)) {
         return res.status(400).send({ auth: false, message: 'Email is required or malformed' });
     }
-
     // check email password valid
     if (!password) {
         return res.status(400).send({ auth: false, message: 'Password is required' });
