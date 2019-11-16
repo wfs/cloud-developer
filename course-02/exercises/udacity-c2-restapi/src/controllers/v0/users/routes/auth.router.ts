@@ -36,6 +36,7 @@ function generateJWT(user: User): string {
  * If no, it rejects the request and sends appropriate HTTP status codes.
  */
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
+    console.log('*** Entered requireAuth function ...');
     //return next();
     if (!req.headers || !req.headers.authorization){
         return res.status(401).send({ message: 'No authorization headers.' });
@@ -44,6 +45,7 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
     // spliting on first space (' ') as is in format "Bearer <token>" e.g. "Bearer haksdhfkdjshfjkdshfjkdshfkjshdfjdhsfkdsh"
     const token_bearer = req.headers.authorization.split(' ');
     if(token_bearer.length != 2){
+        console.log('token_bearer: ',token_bearer);
         return res.status(401).send({ message: 'Malformed token.' });
     }
     
