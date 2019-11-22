@@ -48,6 +48,9 @@ export class AuthService {
   }
 
   register(user: User, password: string): Promise<any> {
+    console.log('*** Entered register service ...');
+    console.log('user: ', user);
+    console.log('password: ', password);
     return this.api.post('/users/auth/',
               {email: user.email, password: password})
               .then((res) => {
