@@ -1,20 +1,4 @@
-# Use nodejs as the base container image
-FROM node:12
+# Use nginx as the base container so we can implement forward-proxy
+FROM nginx:alpine
 
-# Create app directory
-WORKDIR /usr/src/app
-
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available.
-# COPY package*.json ./
-# RUN npm ci
-
-# Bundle app source
-COPY . .
-
-RUN npm install
-
-EXPOSE 8080
-
-CMD [ "npm", "run", "dev" ]
+COPY nginx.conf /etc/nginx/nginx.conf
