@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
@@ -6,7 +6,10 @@ metadata:
     #version: v2
   name: reverseproxy
 spec:
-  replicas: 2
+  replicas: 1
+  selector:
+    matchLabels:
+      service: reverseproxy
   template:
     metadata:
       labels:
