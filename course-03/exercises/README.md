@@ -17,15 +17,52 @@
 
   ![Manual and Automatic build activity diagram](kubernetes_cluster_creation_process_20191214.png)
 
-  1. Code & Libraries: HTML / CSS / [Typescript](https://www.typescriptlang.org/docs/home.html) -> JavaScript / [NodeJS](https://nodejs.org/en/) / configuration files / environment variables.
-  2. [Docker](https://docs.docker.com/) build of microservices into images. Store of docker images on [dockerhub repository](https://hub.docker.com/repositories).
-  3. Infrastructure As Code: [Terraform](https://www.terraform.io/) enables us to plan and apply a clustered DEMO environment (network, compute, storage, IAM) on [aws](https://aws.amazon.com/).
-  4. [Kubeone](https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md) / kubectl to create and retrieve docker images from dockerhub and apply as docker containers in separate Pods.
+1. Code & Libraries: HTML / CSS / [Typescript](https://www.typescriptlang.org/docs/home.html) -> JavaScript / [NodeJS](https://odejs.org/en/) / configuration files / environment variables.
 
-  #### Automated CI / CD
+2. [Docker](https://docs.docker.com/) build of microservices into images. Store of docker images on [dockerhub repository](https://hub.docker.com/repositories).
 
-  1. With `./.travis.yml` in project root, add a webhook in Github with [travis-ci](https://travis-ci.org/wfs/cloud-developer), select your [Github](https://github.com/wfs/cloud-developer/tree/master/course-03/exercises) repository from travis-ci to monitor for new code pushes. Automated builds of the docker services images will occur on each new git push from Local.
-     ![Automated CI build in travis-ci](travis_build_success_20191208.png)
+   ```terminal
+   # Build a docker image with Docker file.
+
+   andrew@andrew-Alienware-Aurora-R5:~/dev/cloud-developer/course-03/exercises/udacity-c3-deployment/docker$ sudo docker build -t openflocks/reverseproxy .
+
+   # View your built images. Push to dockerhub image repository.
+
+   andrew@andrew-Alienware-Aurora-R5:~/dev/cloud-developer/course-03/exercises/udacity-c3-frontend$ sudo docker images
+        REPOSITORY                        TAG                 IMAGE ID            CREATED             SIZE
+        openflocks/udacity-frontend       latest              06cb7e79c0d7        16 hours ago        1.38GB
+        openflocks/udacity-restapi-feed   latest              9715e9431575        16 hours ago        1.12GB
+        openflocks/udacity-restapi-user   latest              cbdf81cfbfd3        17 hours ago        1.12GB
+        node                              12                  961bb6b05db5        34 hours ago        908MB
+        alpine                            latest              965ea09ff2eb        4 weeks ago         5.55MB
+
+   andrew@andrew-Alienware-Aurora-R5:~/dev/cloud-developer/course-03/exercises/udacity-c3-frontend$ sudo docker push openflocks/udacity-frontend
+   ```
+
+3. Infrastructure As Code: [Terraform](https://www.terraform.io/) enables us to plan and apply a clustered DEMO environment (network, compute, storage, IAM) on [aws](https://aws.amazon.com/).
+
+   ```terminal
+   # Create the aws infrastructure using terraform.
+
+   andrew@andrew-Alienware-Aurora-R5:~/Documents/kubeone/examples/terraform/aws$ terraform plan
+
+   andrew@andrew-Alienware-Aurora-R5:~/Documents/kubeone/examples/terraform/aws$ terraform apply
+   ```
+
+4. [Kubeone](https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md) / kubectl to create and retrieve docker images from dockerhub and apply as docker containers in separate Pods.
+
+   ```terminal
+   # Install kubernetes and create worker nodes.
+
+   andrew@andrew-Alienware-Aurora-R5:~/Documents/kubeone/examples/terraform/aws$ kubeone install config.yaml --tfjson .
+
+   # Note: Kubeone automatically downloads the kubeconfig file for the cluster e.g. "demo-kubeconfig".
+   ```
+
+#### Automated CI / CD
+
+1. With `./.travis.yml` in project root, add a webhook in Github with [travis-ci](https://travis-ci.org/wfs/cloud-developer), select your [Github](https://github.com/wfs/cloud-developer/tree/master/course-03/exercises) repository from travis-ci to monitor for new code pushes. Automated builds of the docker services images will occur on each new git push from Local.
+   ![Automated CI build in travis-ci](travis_build_success_20191208.png)
 
 ## 2. Container
 
