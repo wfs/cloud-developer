@@ -13,19 +13,18 @@
   ```terminal
   course-03/exercises/udacity-c3-deployment/docker$ sudo docker-compose up
   ```
-- ### Main building blocks
+- ### Main building blocks, manual build / deploy
 
-  ![Manual and Automatic build activity diagram](kubernetes_cluster_creation_process_20191208.png)
+  ![Manual and Automatic build activity diagram](kubernetes_cluster_creation_process_20191214.png)
 
-  #### Manual build / deploy
-
-  1. Local development / test / docker image build and push to dockerhub repository.
-  2. Terraform / Kubeone the aws kubernetes cluster of Worker and Master nodes to manage / host the pods.
-  3. `kubectl apply` the docker containers into the kubernetes pods.
+  1. Code & Libraries: HTML / CSS / [Typescript](https://www.typescriptlang.org/docs/home.html) -> JavaScript / [NodeJS](https://nodejs.org/en/) / configuration files / environment variables.
+  2. [Docker](https://docs.docker.com/) build of microservices into images. Store of docker images on [dockerhub repository](https://hub.docker.com/repositories).
+  3. Infrastructure As Code: [Terraform](https://www.terraform.io/) enables us to plan and apply a clustered DEMO environment (network, compute, storage, IAM) on [aws](https://aws.amazon.com/).
+  4. [Kubeone](https://github.com/kubermatic/kubeone/blob/master/docs/quickstart-aws.md) / kubectl to create and retrieve docker images from dockerhub and apply as docker containers in separate Pods.
 
   #### Automated CI / CD
 
-  1. With `./.travis.yml` in project root, add a webhook in Github with travis-ci, select your Github repository from travis-ci to monitor for new code pushes. Automated builds of the docker services images will occur on each new git push from Local.
+  1. With `./.travis.yml` in project root, add a webhook in Github with [travis-ci](https://travis-ci.org/wfs/cloud-developer), select your [Github](https://github.com/wfs/cloud-developer/tree/master/course-03/exercises) repository from travis-ci to monitor for new code pushes. Automated builds of the docker services images will occur on each new git push from Local.
      ![Automated CI build in travis-ci](travis_build_success_20191208.png)
 
 ## 2. Container
@@ -87,7 +86,10 @@ deployment.apps/backend-user configured
 ```
 
 - Rolling update
+  ![Scale out backend user service nodes from 1 to 3](kubectl_scale_out_rolling_update_20191214.png)
 
 - A/B deployment of the application
 
-- Monitoring via Amazon Cloudwatch
+  > [Deployment strategies](https://github.com/ContainerSolutions/k8s-deployment-strategies) using kubernetes and load balancer configuration.
+
+- Monitoring via [Amazon Cloudwatch](https://docs.aws.amazon.com/en_pv/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html)
