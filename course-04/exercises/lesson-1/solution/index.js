@@ -10,6 +10,7 @@ const url = process.env.URL
 const cloudwatch = new AWS.CloudWatch();
 
 exports.handler = async (event) => {
+  // TODO: Use these variables to record metric values
   let endTime
   let requestWasSuccessful
 
@@ -25,6 +26,7 @@ exports.handler = async (event) => {
 
   const totalTime = endTime - startTime
 
+// TODO: Record if a response was successful or not
   await cloudwatch.putMetricData({
     MetricData: [
       {
@@ -42,6 +44,7 @@ exports.handler = async (event) => {
     Namespace: 'Udacity/Serveless'
   }).promise()
 
+// TODO: Record time it took to get a response
   await cloudwatch.putMetricData({
     MetricData: [
       {
