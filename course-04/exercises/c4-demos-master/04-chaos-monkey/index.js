@@ -2,13 +2,16 @@
 
 const AWS = require('aws-sdk')
 var _ = require('lodash')
-const ec2 = new AWS.EC2({region: 'us-east-1'})
+const ec2 = new AWS.EC2({ region: 'ap-southeast-2' })
 
-exports.handler = async (event) => {
+exports.handler = async event => {
   console.log('Processing event: ', event)
 
   const reservations = await getReservations()
-  const allInstances = _.flatMap(reservations, (reservation) => reservation.Instances)
+  const allInstances = _.flatMap(
+    reservations,
+    reservation => reservation.Instances
+  )
 
   console.log('Current instances running: ', allInstances)
 
@@ -22,14 +25,16 @@ exports.handler = async (event) => {
 }
 
 async function getReservations() {
-  const result = await ec2.describeInstances({
-    Filters: [
-      {
-        Name: 'instance-state-name',
-        Values: ['running']
-      }
-    ]
-  }).promise()
+  const result = await ec2
+    .describeInstances({
+      Filters: [
+        {
+          Name: 'instance-state-name',
+          Values: ['running']
+        }
+      ]
+    })
+    .promise()
 
   console.log('Reservations: ', JSON.stringify(result))
 
@@ -44,11 +49,11 @@ function selectInstanceIdToTerminate(instances) {
 async function terminateInstance(instanceId) {
   console.log('Terminating instance', instanceId)
 
-  await ec2.terminateInstances({
-    InstanceIds: [
-      instanceId
-    ]
-  }).promise()
+  await ec2
+    .terminateInstances({
+      InstanceIds: [instanceId]
+    })
+    .promise()
 
   console.log('Instance was terminated')
 }
