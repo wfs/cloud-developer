@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  AWS_MEDIA_BUCKET: udagram-wilkie-dev
+  AWS_PROFILE: udagram-wilkie-dev
+  AWS_REGION: ap-southeast-2
+  JWT_SECRET: hello
+  POSTGRES_USERNAME: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DATABASE_NAME: database_name
+  POSTGRES_HOST: database-instance-id.cvblabgxnph4.ap-southeast-2.rds.amazonaws.com
+  POSTGRES_DIALECT: postgres
+  URL: http://localhost:8100  
+metadata:
+  name: env-config
+  
