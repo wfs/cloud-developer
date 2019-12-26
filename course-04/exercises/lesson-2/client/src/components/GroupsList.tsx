@@ -1,38 +1,45 @@
-import * as React from 'react'
-import { GroupModel } from '../types/GroupModel'
-import { Group } from './Group'
-import { getGroups } from '../api/groups-api'
-import { Card, Button, Divider } from 'semantic-ui-react'
-import { History } from 'history'
+import * as React from "react";
+import { GroupModel } from "../types/GroupModel";
+import { Group } from "./Group";
+import { getGroups } from "../api/groups-api";
+import { Card, Button, Divider } from "semantic-ui-react";
+import { History } from "history";
 
 interface GroupsListProps {
-  history: History
+  history: History;
 }
 
 interface GroupsListState {
-  groups: GroupModel[]
+  groups: GroupModel[];
 }
 
-export class GroupsList extends React.PureComponent<GroupsListProps, GroupsListState> {
+export class GroupsList extends React.PureComponent<
+  GroupsListProps,
+  GroupsListState
+> {
   state: GroupsListState = {
     groups: []
-  }
+  };
 
   handleCreateGroup = () => {
-    this.props.history.push(`/groups/create`)
-  }
+    this.props.history.push(`/groups/create`);
+  };
 
   async componentDidMount() {
     try {
-      const groups = await getGroups()
+      const groups = await getGroups();
       this.setState({
         groups
-      })
+      });
     } catch (e) {
-      alert(`Failed to fetch groups: ${e.message}`)
+      alert(`Failed to fetch groups: ${e.message}`);
     }
   }
 
+  /**
+   * Renders groups list
+   * @returns
+   */
   render() {
     return (
       <div>
@@ -51,10 +58,10 @@ export class GroupsList extends React.PureComponent<GroupsListProps, GroupsListS
 
         <Card.Group>
           {this.state.groups.map(group => {
-            return <Group key={group.id} group={group} />
+            return <Group key={group.id} group={group} />;
           })}
         </Card.Group>
       </div>
-    )
+    );
   }
 }

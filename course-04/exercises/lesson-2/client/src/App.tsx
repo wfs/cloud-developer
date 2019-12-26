@@ -9,6 +9,10 @@ export interface AppProps {}
 export interface AppState {}
 
 export default class App extends Component<AppProps, AppState> {
+  /**
+   * Renders app
+   * @returns
+   */
   render() {
     return (
       <div>
@@ -46,6 +50,10 @@ export default class App extends Component<AppProps, AppState> {
   //     );
   //   }
 
+  /**
+   * Generates menu
+   * @returns
+   */
   generateMenu() {
     return (
       <Menu>
@@ -56,6 +64,10 @@ export default class App extends Component<AppProps, AppState> {
     );
   }
 
+  /**
+   * Generates current page
+   * @returns
+   */
   generateCurrentPage() {
     return (
       <Switch>

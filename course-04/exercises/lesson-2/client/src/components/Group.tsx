@@ -1,26 +1,26 @@
-import * as React from 'react'
-import { Card } from 'semantic-ui-react'
-import { GroupModel } from '../types/GroupModel'
+import * as React from "react";
+import { Card } from "semantic-ui-react";
+import { GroupModel } from "../types/GroupModel";
 
 interface GroupCardProps {
-  group: GroupModel
+  group: GroupModel;
 }
 
-interface GroupCardState {
-}
+interface GroupCardState {}
 
 export class Group extends React.PureComponent<GroupCardProps, GroupCardState> {
-
+  /**
+   * Renders group
+   * @returns
+   */
   render() {
     return (
       <Card>
         <Card.Content>
-          <Card.Header>
-            {this.props.group.name}
-          </Card.Header>
+          <Card.Header>{this.props.group.name}</Card.Header>
           <Card.Description>{this.props.group.description}</Card.Description>
         </Card.Content>
       </Card>
-    )
+    );
   }
 }
