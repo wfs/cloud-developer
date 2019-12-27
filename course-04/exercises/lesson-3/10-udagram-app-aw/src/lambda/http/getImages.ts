@@ -5,7 +5,6 @@ import {
 } from "aws-lambda";
 import "source-map-support/register";
 import * as AWS from "aws-sdk";
-import * as uuid from "uuid";
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
@@ -31,20 +30,24 @@ export const handler: APIGatewayProxyHandler = async (
     };
   }
 
-  const imageId = uuid.v4();
-  const newItem = await createImage(groupId, imageId, event);
+  const images = await getImagesPerGroup(groupId);
 
   return {
-    statusCode: 201,
+    statusCode: 200,
     headers: {
       "Access-Control-Allow-Origin": "*"
     },
     body: JSON.stringify({
-      newItem: newItem
+      items: images
     })
   };
 };
 
+/**
+ * Groups exists
+ * @param groupId
+ * @returns
+ */
 async function groupExists(groupId: string) {
   const result = await docClient
     .get({
@@ -59,37 +62,22 @@ async function groupExists(groupId: string) {
   return !!result.Item;
 }
 
-async function createImage(groupId: string, imageId: string, event: any) {
-  const timestamp = new Date().toISOString();
-  const newImage = JSON.parse(event.body);
-
-  const newItem = {
-    groupId,
-    timestamp,
-    imageId,
-    ...newImage
-  };
-  console.log("Storing new item: ", newItem);
-
-  await docClient
-    .put({
+/**
+ * Gets images per group
+ * @param groupId
+ * @returns
+ */
+async function getImagesPerGroup(groupId: string) {
+  const result = await docClient
+    .query({
       TableName: imagesTable,
-      Item: newItem
+      KeyConditionExpression: "groupId = :groupId",
+      ExpressionAttributeValues: {
+        ":groupId": groupId
+      },
+      ScanIndexForward: false
     })
     .promise();
 
-  return newItem;
+  return result.Items;
 }
-
-// #################################################################################
-//
-// From @Guilherme M. in Cloud Developer Student Hub channel on 26-Dec-2019 6:53 PM
-//
-// function getUploadUrl(imageId: string) {
-//   return s3.getSignedUrl('putObject', {
-//     Bucket: bucketName,
-//     Key: imageId,
-//     Expires: parseInt(urlExpiration) // <----- use parse int to fix image uploading
-//   })
-// }
-// #################################################################################
