@@ -2,6 +2,10 @@ import { GroupModel } from "../types/GroupModel";
 import { apiEndpoint } from "../config";
 import { GroupUploadInfo } from "../types/GroupUploadInfo";
 
+/**
+ * Gets groups
+ * @returns groups
+ */
 export async function getGroups(): Promise<GroupModel[]> {
   console.log("Fetching groups");
 
@@ -13,6 +17,11 @@ export async function getGroups(): Promise<GroupModel[]> {
   return result.items;
 }
 
+/**
+ * Creates group
+ * @param newGroup
+ * @returns group
+ */
 export async function createGroup(
   newGroup: GroupUploadInfo
 ): Promise<GroupModel> {
