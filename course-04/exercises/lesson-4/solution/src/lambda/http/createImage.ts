@@ -1,52 +1,63 @@
-import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import 'source-map-support/register'
-import * as AWS  from 'aws-sdk'
-import * as uuid from 'uuid'
+import {
+  APIGatewayProxyHandler,
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult
+} from "aws-lambda";
+import "source-map-support/register";
+import * as AWS from "aws-sdk";
+import * as uuid from "uuid";
 
-const docClient = new AWS.DynamoDB.DocumentClient()
+const docClient = new AWS.DynamoDB.DocumentClient();
 const s3 = new AWS.S3({
-  signatureVersion: 'v4'
-})
+  signatureVersion: "v4"
+});
 
-const groupsTable = process.env.GROUPS_TABLE
-const imagesTable = process.env.IMAGES_TABLE
-const bucketName = process.env.IMAGES_S3_BUCKET
-const urlExpiration = process.env.SIGNED_URL_EXPIRATION
+const groupsTable = process.env.GROUPS_TABLE;
+const imagesTable = process.env.IMAGES_TABLE;
+const bucketName = process.env.IMAGES_S3_BUCKET;
+const urlExpiration = process.env.SIGNED_URL_EXPIRATION;
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  console.log('Caller event', event)
-  const groupId = event.pathParameters.groupId
-  const validGroupId = await groupExists(groupId)
+export const handler: APIGatewayProxyHandler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  console.log("Caller event", event);
+  const groupId = event.pathParameters.groupId;
+  const validGroupId = await groupExists(groupId);
 
   if (!validGroupId) {
     return {
       statusCode: 404,
       headers: {
-        'Access-Control-Allow-Origin': '*'
+        "Access-Control-Allow-Origin": "*"
       },
       body: JSON.stringify({
-        error: 'Group does not exist'
+        error: "Group does not exist"
       })
-    }
+    };
   }
 
-  const imageId = uuid.v4()
-  const newItem = await createImage(groupId, imageId, event)
+  const imageId = uuid.v4();
+  const newItem = await createImage(groupId, imageId, event);
 
-  const url = getUploadUrl(imageId)
+  const url = getUploadUrl(imageId);
 
   return {
     statusCode: 201,
     headers: {
-      'Access-Control-Allow-Origin': '*'
+      "Access-Control-Allow-Origin": "*"
     },
     body: JSON.stringify({
       newItem: newItem,
       uploadUrl: url
     })
-  }
-}
+  };
+};
 
+/**
+ * Groups exists
+ * @param groupId
+ * @returns
+ */
 async function groupExists(groupId: string) {
   const result = await docClient
     .get({
@@ -55,15 +66,22 @@ async function groupExists(groupId: string) {
         id: groupId
       }
     })
-    .promise()
+    .promise();
 
-  console.log('Get group: ', result)
-  return !!result.Item
+  console.log("Get group: ", result);
+  return !!result.Item;
 }
 
+/**
+ * Creates image
+ * @param groupId
+ * @param imageId
+ * @param event
+ * @returns
+ */
 async function createImage(groupId: string, imageId: string, event: any) {
-  const timestamp = new Date().toISOString()
-  const newImage = JSON.parse(event.body)
+  const timestamp = new Date().toISOString();
+  const newImage = JSON.parse(event.body);
 
   const newItem = {
     groupId,
@@ -71,23 +89,28 @@ async function createImage(groupId: string, imageId: string, event: any) {
     imageId,
     ...newImage,
     imageUrl: `https://${bucketName}.s3.amazonaws.com/${imageId}`
-  }
-  console.log('Storing new item: ', newItem)
+  };
+  console.log("Storing new item: ", newItem);
 
   await docClient
     .put({
       TableName: imagesTable,
       Item: newItem
     })
-    .promise()
+    .promise();
 
-  return newItem
+  return newItem;
 }
 
+/**
+ * Gets upload url
+ * @param imageId
+ * @returns
+ */
 function getUploadUrl(imageId: string) {
-  return s3.getSignedUrl('putObject', {
+  return s3.getSignedUrl("putObject", {
     Bucket: bucketName,
     Key: imageId,
     Expires: urlExpiration
-  })
+  });
 }

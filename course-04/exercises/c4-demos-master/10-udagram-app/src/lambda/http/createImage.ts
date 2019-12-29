@@ -1,13 +1,12 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import 'source-map-support/register'
-import * as AWS  from 'aws-sdk'
+import * as AWS from 'aws-sdk'
 import * as uuid from 'uuid'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import * as AWSXRay from 'aws-xray-sdk'
 
 const XAWS = AWSXRay.captureAWS(AWS)
-
 
 const docClient = new XAWS.DynamoDB.DocumentClient()
 const s3 = new XAWS.S3({
@@ -19,33 +18,35 @@ const imagesTable = process.env.IMAGES_TABLE
 const bucketName = process.env.IMAGES_S3_BUCKET
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION
 
-export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  console.log('Caller event', event)
-  const groupId = event.pathParameters.groupId
-  const validGroupId = await groupExists(groupId)
+export const handler = middy(
+  async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    console.log('Caller event', event)
+    const groupId = event.pathParameters.groupId
+    const validGroupId = await groupExists(groupId)
 
-  if (!validGroupId) {
+    if (!validGroupId) {
+      return {
+        statusCode: 404,
+        body: JSON.stringify({
+          error: 'Group does not exist'
+        })
+      }
+    }
+
+    const imageId = uuid.v4()
+    const newItem = await createImage(groupId, imageId, event)
+
+    const url = getUploadUrl(imageId)
+
     return {
-      statusCode: 404,
+      statusCode: 201,
       body: JSON.stringify({
-        error: 'Group does not exist'
+        newItem: newItem,
+        uploadUrl: url
       })
     }
   }
-
-  const imageId = uuid.v4()
-  const newItem = await createImage(groupId, imageId, event)
-
-  const url = getUploadUrl(imageId)
-
-  return {
-    statusCode: 201,
-    body: JSON.stringify({
-      newItem: newItem,
-      uploadUrl: url
-    })
-  }
-})
+)
 
 handler.use(
   cors({
@@ -53,6 +54,11 @@ handler.use(
   })
 )
 
+/**
+ * Groups exists
+ * @param groupId
+ * @returns
+ */
 async function groupExists(groupId: string) {
   const result = await docClient
     .get({
@@ -67,6 +73,13 @@ async function groupExists(groupId: string) {
   return !!result.Item
 }
 
+/**
+ * Creates image
+ * @param groupId
+ * @param imageId
+ * @param event
+ * @returns
+ */
 async function createImage(groupId: string, imageId: string, event: any) {
   const timestamp = new Date().toISOString()
   const newImage = JSON.parse(event.body)
@@ -90,6 +103,11 @@ async function createImage(groupId: string, imageId: string, event: any) {
   return newItem
 }
 
+/**
+ * Gets upload url
+ * @param imageId
+ * @returns
+ */
 function getUploadUrl(imageId: string) {
   return s3.getSignedUrl('putObject', {
     Bucket: bucketName,
