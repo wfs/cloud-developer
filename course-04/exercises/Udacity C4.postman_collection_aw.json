@@ -646,25 +646,25 @@
 	],
 	"variable": [
 		{
-			"id": "73a6af7d-4402-4f2c-9cce-00672021350f",
+			"id": "36e90881-416f-4a80-863b-3ea7d1b1fd04",
 			"key": "apiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "3e0aaacd-d928-4d0e-a71e-b8526f015f09",
+			"id": "8b4eba52-1f81-4531-b237-325c3a43b0f0",
 			"key": "helloApiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "b7c2c52a-eddc-48a4-9f6b-86cef515d456",
+			"id": "de245281-dff5-4d70-83cc-afb485a7f93c",
 			"key": "prodApiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "d027ed1d-6b7e-4047-8349-9a484a424323",
+			"id": "d58cc070-324d-42e7-9b49-8fed756682fd",
 			"key": "authToken",
 			"value": "",
 			"type": "string"
