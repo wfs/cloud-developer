@@ -1,6 +1,6 @@
-import * as React from 'react'
-import { Form, Button } from 'semantic-ui-react'
-import { createImage, uploadFile } from '../api/images-api'
+import * as React from "react";
+import { Form, Button } from "semantic-ui-react";
+import { createImage, uploadFile } from "../api/images-api";
 
 enum UploadState {
   NoUpload,
@@ -11,15 +11,15 @@ enum UploadState {
 interface CreateImageProps {
   match: {
     params: {
-      groupId: string
-    }
-  }
+      groupId: string;
+    };
+  };
 }
 
 interface CreateImageState {
-  title: string
-  file: any
-  uploadState: UploadState
+  title: string;
+  file: any;
+  uploadState: UploadState;
 }
 
 export class CreateImage extends React.PureComponent<
@@ -27,59 +27,68 @@ export class CreateImage extends React.PureComponent<
   CreateImageState
 > {
   state: CreateImageState = {
-    title: '',
+    title: "",
     file: undefined,
     uploadState: UploadState.NoUpload
-  }
+  };
 
   handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ title: event.target.value })
-  }
+    this.setState({ title: event.target.value });
+  };
 
   handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    if (!files) return
+    const files = event.target.files;
+    if (!files) return;
 
-    console.log('File change', files)
+    console.log("File change", files);
     this.setState({
       file: files[0]
-    })
-  }
+    });
+  };
 
+  /**
+   * Events handle submit
+   * @param event
+   * @returns
+   */
   handleSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault()
+    event.preventDefault();
 
     try {
       if (!this.state.file) {
-        alert('File should be selected')
-        return
+        alert("File should be selected");
+        return;
       }
 
-      this.setUploadState(UploadState.UploadingData)
+      this.setUploadState(UploadState.UploadingData);
       const uploadInfo = await createImage({
         groupId: this.props.match.params.groupId,
         title: this.state.title
-      })
+      });
 
-      console.log('Created image', uploadInfo)
+      console.log("Created image", uploadInfo);
 
-      this.setUploadState(UploadState.UploadingFile)
-      await uploadFile(uploadInfo.uploadUrl, this.state.file)
+      this.setUploadState(UploadState.UploadingFile);
+      await uploadFile(uploadInfo.uploadUrl, this.state.file);
 
-      alert('Image was uploaded!')
+      alert("Image was uploaded!");
     } catch (e) {
-      alert('Could not upload an image: ' + e.message)
+      alert("Could not upload an image: " + e.message);
     } finally {
-      this.setUploadState(UploadState.NoUpload)
+      this.setUploadState(UploadState.NoUpload);
     }
-  }
+  };
 
   setUploadState(uploadState: UploadState) {
     this.setState({
       uploadState
-    })
+    });
   }
 
+  /**
+   * Renders create image
+   * @returns
+   */
   render() {
     return (
       <div>
@@ -107,15 +116,22 @@ export class CreateImage extends React.PureComponent<
           {this.renderButton()}
         </Form>
       </div>
-    )
+    );
   }
 
+  /**
+   * Renders button
+   * @returns
+   */
   renderButton() {
-
     return (
       <div>
-        {this.state.uploadState === UploadState.UploadingData && <p>Uploading image metadata</p>}
-        {this.state.uploadState === UploadState.UploadingFile && <p>Uploading file</p>}
+        {this.state.uploadState === UploadState.UploadingData && (
+          <p>Uploading image metadata</p>
+        )}
+        {this.state.uploadState === UploadState.UploadingFile && (
+          <p>Uploading file</p>
+        )}
         <Button
           loading={this.state.uploadState !== UploadState.NoUpload}
           type="submit"
@@ -123,6 +139,6 @@ export class CreateImage extends React.PureComponent<
           Upload
         </Button>
       </div>
-    )
+    );
   }
 }

@@ -49,8 +49,8 @@ provider:
         - s3:GetObject
       Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
 
-  apiGateway:
-    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  #apiGateway:
+  #  minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
 
 custom:
   webpack:
