@@ -108,15 +108,15 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"title\": \"New image\"\n}"
+									"raw": "{\n\t\"title\": \"New image n\"\n}"
 								},
 								"url": {
-									"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/groups/1/images",
+									"raw": "https://{{apiId}}.execute-api.ap-southeast-2.amazonaws.com/dev/groups/1/images",
 									"protocol": "https",
 									"host": [
 										"{{apiId}}",
 										"execute-api",
-										"us-east-1",
+										"ap-southeast-2",
 										"amazonaws",
 										"com"
 									],
@@ -646,25 +646,25 @@
 	],
 	"variable": [
 		{
-			"id": "80fdacb0-d7b7-4374-ab3c-c0ca8f4681a7",
+			"id": "337bce0c-82d2-41cf-88ac-848de38675ac",
 			"key": "apiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "2c5fa861-21a2-4b93-add6-f56f2a0bc743",
+			"id": "9e25f50e-5a3e-497d-94df-524be74ad016",
 			"key": "helloApiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "8458e9f0-710c-48a1-a0d5-2ac602afff63",
+			"id": "98af6fb3-9423-4049-b9ba-ce2b31706de2",
 			"key": "prodApiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "63b87e8b-386b-4a58-ba4f-47f74a8c6499",
+			"id": "71f1bb2b-5763-4a46-ae4e-9954d296cdfa",
 			"key": "authToken",
 			"value": "",
 			"type": "string"
