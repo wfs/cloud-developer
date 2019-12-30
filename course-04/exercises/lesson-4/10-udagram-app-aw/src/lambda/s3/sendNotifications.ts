@@ -10,7 +10,7 @@ const apiId = process.env.API_ID;
 
 const connectionParams = {
   apiVersion: "2018-11-29",
-  endpoint: `${apiId}.execute-api.us-east-1.amazonaws.com/${stage}`
+  endpoint: `${apiId}.execute-api.ap-southeast-2.amazonaws.com/${stage}`
 };
 
 const apiGateway = new AWS.ApiGatewayManagementApi(connectionParams);
@@ -19,6 +19,21 @@ export const handler: S3Handler = async (event: S3Event) => {
   for (const record of event.Records) {
     const key = record.s3.object.key;
     console.log("Processing S3 item with key: ", key);
+
+    const connections = await docClient
+      .scan({
+        TableName: connectionsTable
+      })
+      .promise();
+
+    const payload = {
+      imageId: key
+    };
+
+    for (const connection of connections.Items) {
+      const connectionId = connection.id;
+      await sendMessageToClient(connectionId, payload);
+    }
   }
 };
 
