@@ -1,4 +1,5 @@
-import { S3Handler, SNSHandler, SNSEvent, S3Event } from "aws-lambda";
+import { S3Handler, S3Event } from "aws-lambda";
+//import { S3Handler, SNSHandler, SNSEvent, S3Event } from "aws-lambda";
 import "source-map-support/register";
 import * as AWS from "aws-sdk";
 
@@ -52,27 +53,27 @@ export const handler: S3Handler = async (event: S3Event) => {
  * Process s3 event
  * @param s3Event
  */
-async function processS3Event(s3Event: S3Event) {
-  for (const record of s3Event.Records) {
-    const key = record.s3.object.key;
-    console.log("Processing S3 item with key: ", key);
+// async function processS3Event(s3Event: S3Event) {
+//   for (const record of s3Event.Records) {
+//     const key = record.s3.object.key;
+//     console.log("Processing S3 item with key: ", key);
 
-    const connections = await docClient
-      .scan({
-        TableName: connectionsTable
-      })
-      .promise();
+//     const connections = await docClient
+//       .scan({
+//         TableName: connectionsTable
+//       })
+//       .promise();
 
-    const payload = {
-      imageId: key
-    };
+//     const payload = {
+//       imageId: key
+//     };
 
-    for (const connection of connections.Items) {
-      const connectionId = connection.id;
-      await sendMessageToClient(connectionId, payload);
-    }
-  }
-}
+//     for (const connection of connections.Items) {
+//       const connectionId = connection.id;
+//       await sendMessageToClient(connectionId, payload);
+//     }
+//   }
+// }
 
 /**
  * Sends message to client
