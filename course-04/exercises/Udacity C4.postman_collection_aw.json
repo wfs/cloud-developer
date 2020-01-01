@@ -267,15 +267,15 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"Postman\",\n\t\"description\": \"Photos of Postman tool\"\n}"
+									"raw": "{\n\t\"name\": \"Postman 1\",\n\t\"description\": \"New group using jwt.io token\"\n}"
 								},
 								"url": {
-									"raw": "https://{{apiId}}.execute-api.us-east-1.amazonaws.com/dev/groups/",
+									"raw": "https://{{apiId}}.execute-api.ap-southeast-2.amazonaws.com/dev/groups/",
 									"protocol": "https",
 									"host": [
 										"{{apiId}}",
 										"execute-api",
-										"us-east-1",
+										"ap-southeast-2",
 										"amazonaws",
 										"com"
 									],
@@ -646,25 +646,25 @@
 	],
 	"variable": [
 		{
-			"id": "b0d61bb2-302d-4b13-abc8-cb73fbb64f5c",
+			"id": "9373bb61-7677-4729-8538-05eba3164b7f",
 			"key": "apiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "5ea05ce5-339e-433c-a6e2-8403f0303cae",
+			"id": "f4e3fb2d-2ab2-4773-b078-8642e443a90b",
 			"key": "helloApiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "2df212c0-386d-4dba-ac27-840de1d9268b",
+			"id": "1c17a4d6-22f7-4cda-a1c1-559b1f4f90a1",
 			"key": "prodApiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "44c57fb0-3ca7-4889-b95c-eb90bd284b10",
+			"id": "9a332098-928a-493f-a9bc-777c26544562",
 			"key": "authToken",
 			"value": "",
 			"type": "string"
