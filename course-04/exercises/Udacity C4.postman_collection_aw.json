@@ -267,7 +267,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"name\": \"Postman 1\",\n\t\"description\": \"New group using jwt.io token\"\n}"
+									"raw": "{\n\t\"name\": \"Postman 4\",\n\t\"description\": \"New group using RS256 Asymetric signing algorithm insted of HS256 Symetric.\"\n}"
 								},
 								"url": {
 									"raw": "https://{{apiId}}.execute-api.ap-southeast-2.amazonaws.com/dev/groups/",
@@ -646,25 +646,25 @@
 	],
 	"variable": [
 		{
-			"id": "e007e8db-b285-41fa-b319-2c1328324cfe",
+			"id": "2a7bb27c-2817-4458-823a-fcacb3dfc46f",
 			"key": "apiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "28350d48-8b16-41b9-9fe6-5187c892478b",
+			"id": "936f3d9f-e4a6-44ba-ac9e-42bca57a48d9",
 			"key": "helloApiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "8245e75e-4290-42a6-ad69-d9e3a4e525c1",
+			"id": "02f9ff37-741c-424b-8d15-bf6617b07c56",
 			"key": "prodApiId",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "66aaf513-dc63-4115-8363-a228038986b9",
+			"id": "f3063aee-cad0-4f93-9db1-942af264bdf2",
 			"key": "authToken",
 			"value": "",
 			"type": "string"
