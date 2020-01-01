@@ -11,9 +11,8 @@
     "http-aws-es": "^6.0.0",
     "jimp": "^0.6.4",
     "jsonwebtoken": "^8.5.1",
-    "middy": "^0.25.0",
     "source-map-support": "^0.5.11",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.17",
@@ -26,7 +25,7 @@
     "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
     "typescript": "^3.2.4",
-    "webpack": "^4.29.0"
+    "webpack": "^4.41.5"
   },
   "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
   "license": "MIT"
