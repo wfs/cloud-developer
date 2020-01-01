@@ -1,11 +1,10 @@
-import {
-  APIGatewayProxyHandler,
-  APIGatewayProxyEvent,
-  APIGatewayProxyResult
-} from "aws-lambda";
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
+// import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import "source-map-support/register";
 import * as AWS from "aws-sdk";
 import * as uuid from "uuid";
+import * as middy from "middy";
+import { cors } from "middy/middlewares";
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 
@@ -18,43 +17,49 @@ const imagesTable = process.env.IMAGES_TABLE;
 const bucketName = process.env.IMAGES_S3_BUCKET;
 const urlExpiration = process.env.SIGNED_URL_EXPIRATION;
 
-export const handler: APIGatewayProxyHandler = async (
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> => {
-  console.log("Caller event", event);
-  const groupId = event.pathParameters.groupId;
-  const validGroupId = await groupExists(groupId);
+export const handler = middy(
+  async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    console.log("Caller event", event);
+    const groupId = event.pathParameters.groupId;
+    const validGroupId = await groupExists(groupId);
 
-  if (!validGroupId) {
+    if (!validGroupId) {
+      return {
+        statusCode: 404,
+        // headers: {
+        //   "Access-Control-Allow-Origin": "*"
+        // },
+        body: JSON.stringify({
+          error: "Group does not exist"
+        })
+      };
+    }
+
+    // TODO: Create an image
+    const imageId = uuid.v4();
+    const newItem = await createImage(groupId, imageId, event);
+
+    // Image Upload
+    const url = getUploadUrl(imageId);
+
     return {
-      statusCode: 404,
-      headers: {
-        "Access-Control-Allow-Origin": "*"
-      },
+      statusCode: 201,
+      // headers: {
+      //   "Access-Control-Allow-Origin": "*"
+      // },
       body: JSON.stringify({
-        error: "Group does not exist"
+        newItem: newItem,
+        uploadUrl: url
       })
     };
   }
+);
 
-  // TODO: Create an image
-  const imageId = uuid.v4();
-  const newItem = await createImage(groupId, imageId, event);
-
-  // Image Upload
-  const url = getUploadUrl(imageId);
-
-  return {
-    statusCode: 201,
-    headers: {
-      "Access-Control-Allow-Origin": "*"
-    },
-    body: JSON.stringify({
-      newItem: newItem,
-      uploadUrl: url
-    })
-  };
-};
+handler.use(
+  cors({
+    credentials: true
+  })
+);
 
 /**
  * Groups exists
