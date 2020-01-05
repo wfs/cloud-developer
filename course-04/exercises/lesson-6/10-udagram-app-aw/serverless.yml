@@ -10,6 +10,10 @@ plugins:
   - serverless-dynamodb-local
   - serverless-offline
 
+# Uncomment to enable individual packaging
+# package:
+#   individually: true
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -227,14 +231,14 @@ functions:
       - websocket:
           route: $disconnect
 
-  SyncWithElasticsearch:
-    environment:
-      ES_ENDPOINT: !GetAtt ImagesSearch.DomainEndpoint
-    handler: src/lambda/dynamoDb/elasticSearchSync.handler
-    events:
-      - stream:
-          type: dynamodb
-          arn: !GetAtt ImagesDynamoDBTable.StreamArn
+#  SyncWithElasticsearch:
+#    environment:
+#      ES_ENDPOINT: !GetAtt ImagesSearch.DomainEndpoint
+#    handler: src/lambda/dynamoDb/elasticSearchSync.handler
+#    events:
+#      - stream:
+#          type: dynamodb
+#          arn: !GetAtt ImagesDynamoDBTable.StreamArn
 
 resources:
   Resources:
@@ -384,30 +388,30 @@ resources:
         DisplayName: Image bucket topic
         TopicName: ${self:custom.topicName}
 
-    ImagesSearch:
-      Type: AWS::Elasticsearch::Domain
-      Properties:
-        ElasticsearchVersion: "6.3"
-        DomainName: images-search-${self:provider.stage}
-        ElasticsearchClusterConfig:
-          DedicatedMasterEnabled: false
-          InstanceCount: "1"
-          ZoneAwarenessEnabled: false
-          InstanceType: t2.small.elasticsearch
-        EBSOptions:
-          EBSEnabled: true
-          Iops: 0
-          VolumeSize: 10
-          VolumeType: "gp2"
-
-        AccessPolicies:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Principal:
-                AWS: "*"
-              Action: "es:*"
-              Resource: "*"
+    #    ImagesSearch:
+    #      Type: AWS::Elasticsearch::Domain
+    #      Properties:
+    #        ElasticsearchVersion: "6.3"
+    #        DomainName: images-search-${self:provider.stage}
+    #        ElasticsearchClusterConfig:
+    #          DedicatedMasterEnabled: false
+    #          InstanceCount: "1"
+    #          ZoneAwarenessEnabled: false
+    #          InstanceType: t2.small.elasticsearch
+    #        EBSOptions:
+    #          EBSEnabled: true
+    #          Iops: 0
+    #          VolumeSize: 10
+    #          VolumeType: "gp2"
+    #
+    #        AccessPolicies:
+    #          Version: "2012-10-17"
+    #          Statement:
+    #            - Effect: Allow
+    #              Principal:
+    #                AWS: "*"
+    #              Action: "es:*"
+    #              Resource: "*"
 
     KMSKey:
       Type: AWS::KMS::Key
