@@ -1,12 +1,17 @@
 import * as AWS from "aws-sdk";
-// import * as AWSXRay from "aws-xray-sdk";
+//import * as AWSXRay from "aws-xray-sdk";
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-// const XAWS = AWSXRay.captureAWS(AWS);
+//const XAWS = AWSXRay.captureAWS(AWS);
 
 import { Group } from "../models/Group";
 
 export class GroupAccess {
+  /**
+   * Creates an instance of group access.
+   * @param [docClient]
+   * @param [groupsTable]
+   */
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly groupsTable = process.env.GROUPS_TABLE

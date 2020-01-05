@@ -5,6 +5,8 @@ import {
 } from "aws-lambda";
 import "source-map-support/register";
 import * as AWS from "aws-sdk";
+//import * as AWSXRay from "aws-xray-sdk";
+//const XAWS = AWSXRay.captureAWS(AWS);
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 

@@ -18,6 +18,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'ap-southeast-2'}
 
+  #tracing:
+  #  lambda: true
+  #  apiGateway: true
+
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     IS_OFFLINE: false

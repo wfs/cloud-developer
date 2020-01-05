@@ -1,13 +1,14 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-// import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import "source-map-support/register";
 import * as AWS from "aws-sdk";
 import * as uuid from "uuid";
 import * as middy from "middy";
 import { cors } from "middy/middlewares";
+//import * as AWSXRay from "aws-xray-sdk";
+
+//const XAWS = AWSXRay.captureAWS(AWS);
 
 const docClient = new AWS.DynamoDB.DocumentClient();
-
 const s3 = new AWS.S3({
   signatureVersion: "v4"
 });
@@ -26,27 +27,19 @@ export const handler = middy(
     if (!validGroupId) {
       return {
         statusCode: 404,
-        // headers: {
-        //   "Access-Control-Allow-Origin": "*"
-        // },
         body: JSON.stringify({
           error: "Group does not exist"
         })
       };
     }
 
-    // TODO: Create an image
     const imageId = uuid.v4();
     const newItem = await createImage(groupId, imageId, event);
 
-    // Image Upload
     const url = getUploadUrl(imageId);
 
     return {
       statusCode: 201,
-      // headers: {
-      //   "Access-Control-Allow-Origin": "*"
-      // },
       body: JSON.stringify({
         newItem: newItem,
         uploadUrl: url
