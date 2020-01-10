@@ -1,8 +1,9 @@
 import * as AWS from "aws-sdk";
-//import * as AWSXRay from "aws-xray-sdk";
 import { DocumentClient } from "aws-sdk/clients/dynamodb";
 
-//const XAWS = AWSXRay.captureAWS(AWS);
+var AWSXRay = require("aws-xray-sdk");
+
+const XAWS = AWSXRay.captureAWS(AWS);
 
 import { Group } from "../models/Group";
 
@@ -64,5 +65,5 @@ function createDynamoDBClient() {
     });
   }
 
-  return new AWS.DynamoDB.DocumentClient();
+  return new XAWS.DynamoDB.DocumentClient();
 }

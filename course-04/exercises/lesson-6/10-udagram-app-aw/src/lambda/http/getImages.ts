@@ -5,11 +5,12 @@ import {
 } from "aws-lambda";
 import "source-map-support/register";
 import * as AWS from "aws-sdk";
-//import * as AWSXRay from "aws-xray-sdk";
 
-//const XAWS = AWSXRay.captureAWS(AWS);
+var AWSXRay = require("aws-xray-sdk");
 
-const docClient = new AWS.DynamoDB.DocumentClient();
+const XAWS = AWSXRay.captureAWS(AWS);
+
+const docClient = new XAWS.DynamoDB.DocumentClient();
 
 const groupsTable = process.env.GROUPS_TABLE;
 const imagesTable = process.env.IMAGES_TABLE;
